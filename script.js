@@ -1,136 +1,107 @@
-body{
-margin:0;
-background:#111;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-font-family:sans-serif;
+const car=document.getElementById("playerCar")
+const leftBtn=document.getElementById("leftBtn")
+const rightBtn=document.getElementById("rightBtn")
+const game=document.querySelector(".game")
+const scoreText=document.getElementById("score")
+const gameOverScreen=document.getElementById("gameOver")
+const crashImg=document.getElementById("crashImg")
+
+let x=105
+let score=0
+let running=true
+
+const enemyCars=[
+"https://i.ibb.co/7QpKsCX/car1.png",
+"https://i.ibb.co/Z8h8b4B/car2.png",
+"https://i.ibb.co/p0K0F5F/car3.png"
+]
+
+// movement
+function left(){
+if(x>0){
+x-=52
+car.style.left=x+"px"
+}
+}
+function right(){
+if(x<210){
+x+=52
+car.style.left=x+"px"
+}
 }
 
-.phone{
-width:300px;
-height:600px;
-background:black;
-border:8px solid #333;
-border-radius:40px;
-display:flex;
-justify-content:center;
-align-items:center;
+leftBtn.onclick=left
+rightBtn.onclick=right
+
+document.addEventListener("keydown",e=>{
+if(!running)return
+if(e.key==="ArrowLeft")left()
+if(e.key==="ArrowRight")right()
+})
+
+// spawn enemy
+
+function spawn(){
+if(!running)return
+
+const e=document.createElement("img")
+e.src=enemyCars[Math.floor(Math.random()*enemyCars.length)]
+e.classList.add("enemy")
+
+let lane=Math.floor(Math.random()*3)
+let pos=[0,105,210]
+e.style.left=pos[lane]+"px"
+e.style.top="-100px"
+
+game.appendChild(e)
+
+let fall=setInterval(()=>{
+
+if(!running)return clearInterval(fall)
+
+e.style.top=e.offsetTop+6+"px"
+
+if(collide(car,e)) crash()
+
+if(e.offsetTop>600){
+e.remove()
+clearInterval(fall)
 }
 
-.game{
-position:relative;
-width:260px;
-height:520px;
-overflow:hidden;
-background:#222;
-border-radius:20px;
+},30)
 }
 
-/* road */
+setInterval(spawn,1200)
 
-#road{
-position:absolute;
-width:100%;
-height:100%;
-background:
-repeating-linear-gradient(
-to bottom,
-#444 0px,
-#444 60px,
-#333 60px,
-#333 120px
-);
-animation:road 0.4s linear infinite;
+// collision
+
+function collide(a,b){
+return !(
+a.offsetTop>b.offsetTop+b.offsetHeight||
+a.offsetTop+a.offsetHeight<b.offsetTop||
+a.offsetLeft>b.offsetLeft+b.offsetWidth||
+a.offsetLeft+a.offsetWidth<b.offsetLeft
+)
 }
 
-@keyframes road{
-from{background-position-y:0}
-to{background-position-y:120px}
+// score
+
+setInterval(()=>{
+if(!running)return
+score++
+scoreText.innerText="Score: "+score
+},1000)
+
+// crash
+
+function crash(){
+running=false
+crashImg.src="PUT_YOUR_CRASH_IMAGE_LINK_HERE"
+gameOverScreen.classList.remove("hidden")
 }
 
-/* lane line */
+// restart
 
-#road::after{
-content:"";
-position:absolute;
-left:50%;
-top:0;
-width:6px;
-height:100%;
-background:
-repeating-linear-gradient(
-to bottom,
-white 0px,
-white 30px,
-transparent 30px,
-transparent 60px
-);
-transform:translateX(-50%);
-}
-
-/* cars */
-
-#playerCar{
-position:absolute;
-bottom:20px;
-left:105px;
-width:50px;
-}
-
-.enemy{
-position:absolute;
-width:50px;
-}
-
-/* controls */
-
-.controls{
-position:absolute;
-bottom:10px;
-width:100%;
-display:flex;
-justify-content:space-between;
-}
-
-button{
-font-size:22px;
-padding:8px 18px;
-border:none;
-border-radius:8px;
-}
-
-/* score */
-
-#score{
-position:absolute;
-top:5px;
-left:10px;
-color:white;
-font-weight:bold;
-}
-
-/* crash screen */
-
-#gameOver{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.9);
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-gap:20px;
-}
-
-#gameOver img{
-width:180px;
-}
-
-.hidden{
-display:none;
+function restartGame(){
+location.reload()
 }

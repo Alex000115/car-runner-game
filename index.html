@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Car Runner Game</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Car Runner</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<div class="phone">
+
 <div class="game">
-  <div id="road"></div>
-  <div id="playerCar"></div>
 
-  <div class="controls">
-    <button id="leftBtn">⬅</button>
-    <button id="rightBtn">➡</button>
-  </div>
+<div id="road"></div>
 
-  <div id="score">Score: 0</div>
-  <div id="gameOver" class="hidden">
-    <h1>Crash!</h1>
-  </div>
+<img id="playerCar" src="https://i.ibb.co/ZYW3VTp/redcar.png">
+
+<div id="score">Score: 0</div>
+
+<div id="gameOver" class="hidden">
+    <img id="crashImg" src="" alt="">
+    <button onclick="restartGame()">Restart</button>
+</div>
+
+<div class="controls">
+<button id="leftBtn">⬅</button>
+<button id="rightBtn">➡</button>
+</div>
+
+</div>
 </div>
 
 <script src="script.js"></script>

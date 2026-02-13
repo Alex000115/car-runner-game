@@ -1,35 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Car Runner</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Runner - Survival Game</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="game-container">
+        <div id="score">Score: 0</div>
 
-<div class="phone">
+        <div id="game-board">
+            <div id="player-car"></div>
+            </div>
 
-<div class="game">
+        <div id="game-over" class="hidden">
+            <img src="crash.png" alt="Crash" id="crash-img">
+            <h1>GAME OVER!</h1>
+            <button onclick="location.reload()">Restart</button>
+        </div>
 
-<div id="road"></div>
-
-<img id="playerCar" src="https://i.ibb.co/ZYW3VTp/redcar.png">
-
-<div id="score">Score: 0</div>
-
-<div id="gameOver" class="hidden">
-    <img id="crashImg" src="" alt="">
-    <button onclick="restartGame()">Restart</button>
-</div>
-
-<div class="controls">
-<button id="leftBtn">⬅</button>
-<button id="rightBtn">➡</button>
-</div>
-
-</div>
-</div>
-
-<script src="script.js"></script>
+        <div class="controls">
+            <button id="left-btn">←</button>
+            <button id="right-btn">→</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -96,7 +96,7 @@ scoreText.innerText="Score: "+score
 
 function crash(){
 running=false
-crashImg.src="PUT_YOUR_CRASH_IMAGE_LINK_HERE"
+crashImg.src="https://raw.githubusercontent.com/Alex000115/car-runner-game/main/crash.png"
 gameOverScreen.classList.remove("hidden")
 }
 

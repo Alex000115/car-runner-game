@@ -1,8 +1,8 @@
 body {
     margin: 0;
     overflow: hidden;
-    background-color: #222;
-    font-family: 'Arial', sans-serif;
+    background-color: #1a1a1a;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .game-container {
@@ -15,46 +15,44 @@ body {
 
 #game-board {
     position: relative;
-    width: 300px;
+    width: 320px; /* 4 lanes (80px each) */
     height: 100vh;
     background-color: #333;
-    border-left: 4px solid #fff;
-    border-right: 4px solid #fff;
+    border-left: 4px solid #f1c40f;
+    border-right: 4px solid #f1c40f;
     overflow: hidden;
 }
 
-/* Road Lane Lines */
-.line {
+/* Lane Dividers */
+.lane-line {
     position: absolute;
-    width: 8px;
-    height: 50px;
-    background-color: white;
-    left: 50%;
-    transform: translateX(-50%);
+    width: 2px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    top: 0;
 }
 
 #player-car {
     position: absolute;
-    bottom: 30px;
-    left: 125px;
+    bottom: 40px;
     width: 50px;
-    height: 90px;
+    height: 85px;
     background-image: url('car.png');
     background-size: contain;
     background-repeat: no-repeat;
-    z-index: 5;
+    transition: left 0.15s ease-out; /* Smooth lane switching */
+    z-index: 10;
 }
 
 .enemy-car {
     position: absolute;
     width: 50px;
-    height: 90px;
+    height: 85px;
     background-image: url('enemy.png');
     background-size: contain;
     background-repeat: no-repeat;
-    /* Enemy car image-ke rotate korchi jate mone hoy player-er dike asche */
     transform: rotate(180deg);
-    z-index: 4;
+    z-index: 5;
 }
 
 #score {
@@ -62,9 +60,10 @@ body {
     top: 20px;
     left: 20px;
     color: white;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
-    z-index: 10;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    z-index: 20;
 }
 
 #game-over {
@@ -74,37 +73,38 @@ body {
     transform: translate(-50%, -50%);
     background: rgba(0,0,0,0.9);
     color: white;
-    padding: 30px;
+    padding: 40px;
     text-align: center;
-    border-radius: 15px;
-    z-index: 20;
+    border-radius: 20px;
+    z-index: 100;
 }
 
 .hidden { display: none; }
 
-#crash-img { width: 100px; margin-bottom: 15px; }
+#crash-img { width: 120px; margin-bottom: 20px; border-radius: 10px; }
 
 .controls {
     position: absolute;
-    bottom: 40px;
+    bottom: 30px;
     width: 100%;
+    max-width: 400px;
     display: flex;
     justify-content: space-between;
-    padding: 0 30px;
+    padding: 0 40px;
     box-sizing: border-box;
 }
 
 .controls button {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    background: white;
+    background: rgba(255, 255, 255, 0.8);
     border: none;
-    font-size: 30px;
+    font-size: 35px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-@media (min-width: 768px) {
-    .controls { display: none; }
+@media (min-width: 1024px) {
+    .controls { display: none; } /* PC-te button dorkar nai */
 }

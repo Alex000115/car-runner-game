@@ -3,92 +3,101 @@ const playerCar = document.getElementById('player-car');
 const scoreDisplay = document.getElementById('score');
 const gameOverScreen = document.getElementById('game-over');
 
+// 4-Lane positions calculation (320px board, each lane 80px)
+// Centers: 15px, 95px, 175px, 255px (approx)
+const lanePositions = [15, 95, 175, 255]; 
+let currentLane = 1; // Starting lane
 let score = 0;
-let carPos = 125; 
 let isGameOver = false;
 
-// 1. Create Road Lines
-for (let i = 0; i < 6; i++) {
-    let line = document.createElement('div');
-    line.className = 'line';
-    line.style.top = (i * 150) + "px";
-    gameBoard.appendChild(line);
+// Initialize Player
+function updatePlayer() {
+    playerCar.style.left = lanePositions[currentLane] + "px";
+}
+updatePlayer();
+
+// Create Lane Dividers visually
+for (let i = 1; i < 4; i++) {
+    const divider = document.createElement('div');
+    divider.className = 'lane-line';
+    divider.style.left = (i * 80) + "px";
+    gameBoard.appendChild(divider);
 }
 
-// 2. Road Lines Animation
-function moveLines() {
-    let lines = document.querySelectorAll('.line');
-    lines.forEach(line => {
-        let top = parseInt(line.style.top);
-        if (top >= window.innerHeight) {
-            top = -100;
-        }
-        line.style.top = (top + 7) + "px";
-    });
-}
-
-// 3. Movement
+// Movement Logic
 function moveLeft() {
-    if (carPos > 10 && !isGameOver) {
-        carPos -= 15;
-        playerCar.style.left = carPos + "px";
+    if (currentLane > 0 && !isGameOver) {
+        currentLane--;
+        updatePlayer();
     }
 }
 
 function moveRight() {
-    if (carPos < 240 && !isGameOver) {
-        carPos += 15;
-        playerCar.style.left = carPos + "px";
+    if (currentLane < 3 && !isGameOver) {
+        currentLane++;
+        updatePlayer();
     }
 }
 
-// Controls
+// Keyboard Listeners
 window.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') moveLeft();
-    if (e.key === 'ArrowRight') moveRight();
+    if (e.key === "ArrowLeft") moveLeft();
+    if (e.key === "ArrowRight") moveRight();
 });
 
+// Mobile/Touch Button Listeners
 document.getElementById('left-btn').addEventListener('click', moveLeft);
 document.getElementById('right-btn').addEventListener('click', moveRight);
 
-// 4. Enemy Management
-function createEnemy() {
+// Enemy Spawning
+function spawnEnemy() {
     if (isGameOver) return;
 
     const enemy = document.createElement('div');
     enemy.className = 'enemy-car';
-    enemy.style.left = Math.floor(Math.random() * 240) + "px";
-    enemy.style.top = "-150px";
+    
+    // Pick a random lane (0 to 3)
+    const randomLane = Math.floor(Math.random() * 4);
+    enemy.style.left = lanePositions[randomLane] + "px";
+    enemy.style.top = "-100px";
     gameBoard.appendChild(enemy);
 
-    let enemyInterval = setInterval(() => {
-        let enemyTop = parseInt(enemy.style.top);
+    let enemySpeed = 5 + (score / 15); // Speed increases with score
+
+    let moveEnemy = setInterval(() => {
+        if (isGameOver) {
+            clearInterval(moveEnemy);
+            return;
+        }
+
+        let top = parseInt(enemy.style.top);
         
-        if (enemyTop > window.innerHeight) {
-            clearInterval(enemyInterval);
+        if (top > window.innerHeight) {
+            clearInterval(moveEnemy);
             if (gameBoard.contains(enemy)) gameBoard.removeChild(enemy);
             score++;
             scoreDisplay.innerText = "Score: " + score;
         } else {
-            enemy.style.top = (enemyTop + 6) + "px";
+            enemy.style.top = (top + enemySpeed) + "px";
         }
 
         // Collision Check
-        if (detectCollision(playerCar, enemy)) {
+        if (checkCollision(playerCar, enemy)) {
             endGame();
-            clearInterval(enemyInterval);
         }
     }, 20);
 }
 
-function detectCollision(a, b) {
+function checkCollision(a, b) {
     let aRect = a.getBoundingClientRect();
     let bRect = b.getBoundingClientRect();
+    
+    // Adding small padding for more forgiving collision
     return !(
-        aRect.top > bRect.bottom ||
-        aRect.bottom < bRect.top ||
-        aRect.right < bRect.left ||
-        aRect.left > bRect.right
+        aRect.bottom < bRect.top + 10 || 
+        aRect.top > bRect.bottom - 10 || 
+        aRect.right < bRect.left + 10 || 
+        aRect.left > bRect.right - 10
     );
 }
 
@@ -97,11 +106,5 @@ function endGame() {
     gameOverScreen.classList.remove('hidden');
 }
 
-// Game Intervals
-setInterval(() => {
-    if (!isGameOver) moveLines();
-}, 20);
-
-setInterval(() => {
-    if (!isGameOver) createEnemy();
-}, 2000);
+// Spawn an enemy every 1.5 seconds
+setInterval(spawnEnemy, 1500);

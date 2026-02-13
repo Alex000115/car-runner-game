@@ -15,20 +15,20 @@ body {
 
 #game-board {
     position: relative;
-    width: 320px; /* 4 lanes (80px each) */
+    width: 320px; /* 4 lanes (each 80px) */
     height: 100vh;
     background-color: #333;
-    border-left: 4px solid #f1c40f;
-    border-right: 4px solid #f1c40f;
+    border-left: 4px solid #fff;
+    border-right: 4px solid #fff;
     overflow: hidden;
 }
 
-/* Lane Dividers */
-.lane-line {
+/* Lane Dividers tairi korar jonno */
+.lane-divider {
     position: absolute;
     width: 2px;
     height: 100%;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.2);
     top: 0;
 }
 
@@ -36,25 +36,26 @@ body {
     position: absolute;
     bottom: 40px;
     width: 50px;
-    height: 85px;
+    height: 80px;
     background-image: url('car.png');
     background-size: contain;
     background-repeat: no-repeat;
-    transition: left 0.15s ease-out; /* Smooth lane switching */
+    background-position: center;
+    transition: left 0.2s ease; /* Etai jump effect dibe */
     z-index: 10;
 }
 
 .enemy-car {
     position: absolute;
     width: 50px;
-    height: 85px;
+    height: 80px;
     background-image: url('enemy.png');
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
     transform: rotate(180deg);
     z-index: 5;
 }
-
 #score {
     position: absolute;
     top: 20px;
